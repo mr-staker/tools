@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+import sys
+from decimal import Decimal
+
+from erdpy.conv.conv import Converters
+from erdpy.delegation.staking_provider import DELEGATION_MANAGER_SC_ADDRESS
+
+def int_hexencode(arg):
+    return Converters.str_int_to_hex_str(str(arg))
+
+def create_new_delegation_contract(argv):
+    delegation_cap = int(argv[1]) * 1_000_000_000_000_000_000
+    service_fee = int(Decimal(argv[2]) * 100)
+
+    rtn = 'Send\n\nTo: ' + DELEGATION_MANAGER_SC_ADDRESS + '\n'
+    rtn += 'Amount: 1250 (at minimum)\n'
+    rtn += 'Gas Limit: 60000000\n'
+    rtn += 'Data: createNewDelegationContract'
+    rtn += '@' + int_hexencode(delegation_cap)
+    rtn += '@' + int_hexencode(service_fee)
+
+    return rtn
+
+print(create_new_delegation_contract(sys.argv))
